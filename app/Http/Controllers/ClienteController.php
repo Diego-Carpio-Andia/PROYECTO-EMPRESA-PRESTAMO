@@ -12,6 +12,19 @@ use App\Models\Capital;
 
 use App\Models\Historial;
 
+use App\Models\Factura;
+
+
+//leer pdf 
+use thiagoalessio\TesseractOCR\TesseractOCR;
+
+
+
+//SUBIR ARCHIVO
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\Response;
+
 
 class ClienteController extends Controller
 {
@@ -21,15 +34,16 @@ class ClienteController extends Controller
     }
     
     
-    public function vista_pdf($id){
+    public function vista_pdf($id){        
+     
         
         $cliente = Cliente::find($id);
+        
         $historial = Historial::All();
         
          return view('cliente.vista-pdf',[
             'cliente' => $cliente,
-            'historial' => $historial
-                 
+            'historial' => $historial,
         ]);
         
     }
@@ -44,9 +58,33 @@ class ClienteController extends Controller
             'cliente' => $cliente,
             'historial' => $historial                
         ]);
-              
-        return $pdf->setPaper('a4', 'landscape')->download('Datos del cliente.pdf');
         
+        
+        $fechaHora = date('d/m/Y H:i');
+        $nombreArchivo = 'Datos del cliente '. $cliente->name .' '. $fechaHora . '.pdf'; // Concatena la fecha y hora al nombre del archivo
+        $pdfGenerado = $pdf->setPaper('a4', 'portrait')->download($nombreArchivo); // Descarga el archivo con el nuevo nombre
+        return  $pdfGenerado;
+        
+    }
+    
+     public function get($filename) {
+        //sacamos el nombre del imagen para compararlo con la db y
+        //sacamos la imagen que vendra por la url y 
+        // tambien obtenemos la imagen mediante ->get de nuestra carpeta
+        //de archivos images , luego retornamos un codigo 200 de que todo salio bien
+        $file = Storage::disk('clientes')->get($filename);
+        return new Response($file, 200);
+    }
+    
+    
+    
+    public function list()
+    {
+        $clientes = Cliente::All();        
+        return view('cliente.list-pagos', [
+            'clientes' => $clientes
+                
+        ]);
     }
     
     
@@ -78,7 +116,7 @@ class ClienteController extends Controller
         $apellido = $request->input('surname');
         $dni = $request->input('dni');
         $capital = $request->input('capital');
-        $interes = $capital * 0.1;
+        $interes = $request->input('interes');
         $clave = $request->input('clave');
         $sueldo = $request->input('sueldo');
         $estado = $request->input('estado');
@@ -96,7 +134,7 @@ class ClienteController extends Controller
         $cliente->surname = $apellido;
         $cliente->dni = $dni;
         $cliente->capital = (int) $capital;
-        $cliente->interes = (float) $interes;
+        $cliente->interes = (float) ($interes/100)*$capital;
         $cliente->clave = (int) $clave;
         $cliente->sueldo = (int) $sueldo;
         $cliente->estado = $estado;
@@ -104,7 +142,18 @@ class ClienteController extends Controller
         $cliente->user_id = $user->id;
         $cliente->created_at = $fecha;
         
+          $image_path = $request->file('image');
+
+         //subir fichero 
+        if ($image_path) {
+            $image_path_name = time() .' - '. $image_path->getClientOriginalName();
+            //File::get($imagen_path) lo mueve y guarda dentro de la carpeta images
+            Storage::disk('clientes')->put($image_path_name, File::get($image_path));
+
+            $cliente->imagen = $image_path_name;
+        }
         
+       
         
         
         $cliente->save();
@@ -151,6 +200,8 @@ class ClienteController extends Controller
         
         $historial = Historial::where('cliente_id',$cliente->id)->get();
         
+         $factura = Factura::where('cliente_id',$cliente->id)->get();
+        
         
         if ($user && ($cliente->user_id == $user->id)) {
             
@@ -167,6 +218,15 @@ class ClienteController extends Controller
                 }
             }
             
+            
+             if($factura && count($factura) >= 1){
+                foreach($factura as $factu){
+                    $factu->delete();
+                }
+            }
+            
+            
+            
              if($historial){
                 
                 foreach($historial as $histo){
@@ -177,6 +237,8 @@ class ClienteController extends Controller
                 
              }
             
+             
+              
             
                
                 
@@ -325,6 +387,44 @@ class ClienteController extends Controller
         
         
     }
+    
+    
+    
+    public function search(Request $request)
+    {
+    $query = $request->input('query');
+    $capital = (float)$request->input('capital');
+    $fecha = $request->input('fecha');
+
+        // Filtrar los clientes por nombre o apellido que contenga el texto de búsqueda
+        $clientes = Cliente::where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('name', 'LIKE', "%$query%")
+                ->orWhere('surname', 'LIKE', "%$query%");
+        });
+
+        // Filtrar por capital si se proporciona un valor
+        if (!empty($capital)) {
+            $clientes = $clientes->where('capital', '=', $capital);
+        }
+
+        // Filtrar por fecha si se proporciona una fecha válida
+        if (!empty($fecha)) {
+            try {
+                $fecha = \Carbon\Carbon::createFromFormat('Y-m-d', $fecha);
+                $clientes = $clientes->whereDate('created_at', '=', $fecha);
+            } catch (\Exception $e) {
+                // Si la fecha no se puede parsear, se ignora este filtro
+            }
+        }
+
+        // Obtener los resultados finales
+        $clientes = $clientes->get();
+
+        return view('cliente.list-pagos', [
+            'clientes' => $clientes
+        ]);
+    }
+
     
     
     

@@ -32,7 +32,11 @@ class Cliente extends Model
         return $this->hasMany('App\Models\Historial');
     }
     
+     public function Factura() {
+        return $this->hasMany('App\Models\Factura');
+    }
     
+  
     
   
     

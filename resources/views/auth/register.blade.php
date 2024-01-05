@@ -51,7 +51,7 @@
                 {{ __('¿Ya tienes cuenta?') }}
             </a>
 
-            <x-primary-button class="ml-4">
+            <x-primary-button class="ml-4" >
                 {{ __('Registrate') }}
             </x-primary-button>
         </div>

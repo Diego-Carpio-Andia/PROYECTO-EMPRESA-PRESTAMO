@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('estado',200)->nullable($value = true);
             $table->float('deuda_total_intereses')->nullable($value = true);
             $table->mediumText('descripcion')->nullable($value = true);
+            $table->string('imagen',200)->nullable($value = true);            
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

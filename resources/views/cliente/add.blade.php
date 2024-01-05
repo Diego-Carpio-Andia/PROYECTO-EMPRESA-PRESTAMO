@@ -2,9 +2,6 @@
 <link href="{{ asset('css/general.css') }}" rel="stylesheet">
 
    
-@extends('layouts.dashboard-header')
-
-@section('content')
 
 
 <div class="container">
@@ -16,7 +13,7 @@
 
                 <div class="card-body">
                     <!-- Permitir  meter images con enctype="multipart/form-data" -->
-                    <form method="POST" action="{{route('cliente.save')}}">
+                    <form method="POST" action="{{route('cliente.save')}}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="row mb-3">
@@ -143,6 +140,21 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label for="interes" class="col-md-4 col-form-label text-md-end">{{ __('Intereses') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="interes" type="text" class="form-control" name="interes" required>
+
+
+                                @error('intereses')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+
+                            </div>
+                        </div>
                         
                         
                         
@@ -177,13 +189,20 @@
 
 
                         <div class="row mb-3">
-                            <label for="descripcion" class="col-md-4 col-form-label text-md-end">{{ __('Descripcion') }}</label>
+                            <label for="descripcion" class="col-md-4 col-form-label text-md-end">{{ __('Tipo de moneda') }}</label>
 
                             <div class="col-md-6">
-                                <input id="descripcion" type="text" class="form-control" name="descripcion" required >
-
-
-
+                              
+                                <div class="col-md-12">
+                                    <select name="descripcion" class="form-control" id="descripcion">
+                                        <option>Pago en soles</option>
+                                        <option>Pago en dolares</option>
+                                    </select>
+                                </div>
+                                
+                                
+                                
+                                
                                 @error('descripcion')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -193,6 +212,18 @@
 
                             </div>
                         </div>
+                        
+                        
+                        
+                   <div class="row mb-3">
+                                <label for="image" class="col-md-4 col-form-label text-md-end">{{ __('Imagen') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="image" type="file" class="form-control" name="image">                                
+                                </div>
+                               
+
+                            </div>
                         
                         
                         <div class="row mb-2">
@@ -214,12 +245,6 @@
         </div>
     </div>
 </div>
-
-
-@endsection
-
-
-
 
 
 

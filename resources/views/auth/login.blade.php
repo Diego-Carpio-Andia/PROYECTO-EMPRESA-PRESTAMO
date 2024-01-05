@@ -51,6 +51,15 @@
             </x-primary-button>
             
             
+          
+            
+                <x-primary-button class="ml-3" >
+                
+                    <a style="text-decoration: none" href="{{ route('register') }}">
+                                            {{ __('Registrate') }}
+
+                    </a><!-- comment -->
+            </x-primary-button>
             
             
         </div>

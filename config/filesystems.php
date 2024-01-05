@@ -43,6 +43,20 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'facturas' => [
+            'driver' => 'local',
+            'root' => storage_path('app/facturas'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        
+        
+        'clientes' => [
+            'driver' => 'local',
+            'root' => storage_path('app/clientes'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',

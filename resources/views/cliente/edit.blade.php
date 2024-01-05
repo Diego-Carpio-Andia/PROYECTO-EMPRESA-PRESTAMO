@@ -6,7 +6,22 @@
 
 @section('content')
      
+<style>
+    
+.card {
+  border: none;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
 
+.card-header {
+  border-radius: 5px 5px 0 0;
+}
+
+.card-body {
+  padding: 20px;
+}
+</style>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
