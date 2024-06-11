@@ -228,14 +228,34 @@ p, span, a {
        
         
         .hacertransaprent{
-              /* Establecer el color base */
-            background-color: rgba(0, 123, 255, 0.7); /* RGB con transparencia del 70% */
-
-            /* Crear el degradado */
-            background-image: linear-gradient(90deg, rgba(0, 123, 255, 0.7), #a5d8ff); /* Desvanecimiento a un tono de azul más claro (#a5d8ff) */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            background-color: #014182;
+            border: 1px solid rgb(0,0,0,0,0.2);
+            box-shadow: 0px 0px 6px black;
         }
-
+        
+        .reporte-agregar{
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .reporte-agregar button{
+            margin-top: -20px;
+        }
+        
+        #btnAbrirPopup{
+            margin-top: -36px;
+        }
+        
+      
+        .px-4{
+            margin-bottom: 50px;
+        }
+        
+       
+        
+      
 
 </style>    
 
@@ -368,7 +388,7 @@ p, span, a {
            
             
         </div>
-        <div class="card mb-4">
+        <div class="card mb-4 contenido-tabla">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Clientes
@@ -377,22 +397,33 @@ p, span, a {
 
 
                
-                <form>                    
-                    <div class="box">
-                        <div class="container-1">
-                            <span class="icon"><i class="fa fa-search"></i></span>
-                            <input id="searchTerm" type="text" onkeyup="doSearch()" />
-                        </div>
-                    </div> 
+                
+                
+                <div class="reporte-agregar">
+                    <form>                    
+                        <div class="box">
+                            <div class="container-1">
+                                <span class="icon"><i class="fa fa-search"></i></span>
+                                <input id="searchTerm" type="text" onkeyup="doSearch()" />
+                            </div>
+                        </div>                   
+                    </form>
                     
-                   
-                </form>
+                    <form action="{{ route('reporte') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-danger btn-md" type="submit">ENVIAR REPORTE</button>
+                    </form>         
+
+                    <button id="btnAbrirPopup" class="btn btn-primary btn-md">AGREGAR CLIENTE</button>
+                </div>
+               
+            
 
                 
                     <table id="datos">
                         <thead>
                             <tr>
-                                <th>Codigo</th>
+                                <!-- <th>Codigo</th> --> 
                                 <th>Nombre</th>
                                 <th>DNI</th>
                                 <th>Capital</th>
@@ -412,7 +443,7 @@ p, span, a {
 
                             @foreach($clientes as $cliente)
                             <tr>
-                                <td>{{$cliente->id}}</td>
+                                <!-- <td>{{$cliente->id}}</td> --> 
                                 <td>{{$cliente->surname.' '.$cliente->name}}</td>
                                 <td>{{$cliente->dni}}</td>
 
@@ -513,12 +544,7 @@ p, span, a {
         </style>
         
        <div class="flex-container">
-           <form action="{{ route('reporte') }}" method="POST">
-                @csrf
-                <button class="btn btn-danger btn-md" type="submit">ENVIAR REPORTE</button>
-            </form>         
            
-            <button id="btnAbrirPopup" class="btn btn-primary btn-md">Agregar Cliente</button>
             
        </div>
 

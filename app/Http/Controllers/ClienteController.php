@@ -68,12 +68,16 @@ class ClienteController extends Controller
     }
     
      public function get($filename) {
-        //sacamos el nombre del imagen para compararlo con la db y
-        //sacamos la imagen que vendra por la url y 
-        // tambien obtenemos la imagen mediante ->get de nuestra carpeta
-        //de archivos images , luego retornamos un codigo 200 de que todo salio bien
-        $file = Storage::disk('clientes')->get($filename);
-        return new Response($file, 200);
+        // Verificar si el archivo existe en el disco 'clientes'
+        if (Storage::disk('clientes')->exists($filename)) {
+            // Obtener el archivo del disco 'clientes'
+            $file = Storage::disk('clientes')->get($filename);
+            // Devolver el archivo con un código de respuesta 200
+            return new Response($file, 200);
+        } else {
+            // Devolver una respuesta con un código de error 404 y un mensaje
+            return response()->json(['error' => 'File not found'], 404);
+        }
     }
     
     
@@ -92,7 +96,7 @@ class ClienteController extends Controller
     
     public function index(){
         $user = \Auth::user();
-        $clientes = Cliente::where('user_id',$user->id)->orderBy('surname','asc')->paginate(10);
+        $clientes = Cliente::where('user_id',$user->id)->orderBy('surname','asc')->paginate(100);
         
         
         

@@ -113,13 +113,15 @@
     
     
     @foreach($clientes as $cliente)
-    @if($cliente->imagen != "DEFAULT.PNG")
+   
     <div class="card">
+         @if($cliente->imagen !== null)
         <div class="card-img">
             <a href="#" data-toggle="modal" data-target="#myModal{{$cliente->id}}">
                     <img src="{{ route('cliente.get', ['filename' => $cliente->imagen]) }}" />
             </a>
-        </div>  
+        </div> 
+         @endif
         <div class="card-content">
             <h5>Importe al cliente: <strong>{{$cliente->capital}}</strong></h5>
           <p>Transferencia al cliente <strong>{{$cliente->name.' '.$cliente->surname}}</strong></p>
@@ -127,6 +129,7 @@
         </div>
     </div> 
     
+    @if($cliente->imagen !== null)
      <!-- Modal -->
         <div class="modal fade" id="myModal{{$cliente->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-dialog-centered modal-md"> <!-- Add 'modal-lg' class here -->
@@ -137,8 +140,7 @@
                 </div>
             </div>
         </div>
-     
-    @endif
+     @endif
     @endforeach
 </div>
     

@@ -53,7 +53,7 @@
                             <label for="dni" class="col-md-4 col-form-label text-md-end">{{ __('DNI') }}</label>
 
                             <div class="col-md-6">
-                                <input id="dni" type="text" class="form-control" name="dni" required >
+                                <input id="dni" type="text" class="form-control" name="dni">
 
 
                                 @error('dni')
@@ -105,7 +105,7 @@
                             <label for="sueldo" class="col-md-4 col-form-label text-md-end">{{ __('Sueldo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="sueldo" type="number" class="form-control" name="sueldo" required >
+                                <input id="sueldo" type="number" class="form-control" name="sueldo">
 
 
 

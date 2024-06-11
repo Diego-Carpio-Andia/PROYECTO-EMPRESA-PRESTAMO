@@ -114,14 +114,11 @@
     <div class="card">
         <div class="card-img">
            <a href="#" data-toggle="modal" data-target="#myModal{{$factura->id}}">
-                     <img src="{{ route('facturas.getImage', ['filename' => $factura->imagen]) }}"/>
+               <img style="width: 100%; object-fit: cover" src="{{ route('facturas.getImage', ['filename' => $factura->imagen]) }}"/>
             </a>
         
         </div>  
-        <div class="card-content">
-            <h5>Importe del cliente: <strong>{{$factura->ImporteTransferencia}}</strong></h5>
-          <p>Pago del cliente <strong>{{$cliente->name.' '.$cliente->surname}}</strong> a nombre de <strong>{{$factura->TitularCuentaDestino}}</strong> </p>
-        </div>
+        
     </div> 
     
     
